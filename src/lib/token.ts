@@ -5,7 +5,10 @@ interface Tokens {
   refresh_token: string
 }
 
-// 储存获得的token
+/**
+ * 储存获得的token
+ * @param tokens
+ */
 export const handleToken = (tokens: Tokens) => {
   store.commit("upAccessToken", tokens.access_token)
   localStorage.setItem("refreshToken", tokens.refresh_token)

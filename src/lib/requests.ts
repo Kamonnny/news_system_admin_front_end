@@ -87,6 +87,13 @@ const handlerData = (response: ApiResponse) => {
  * 上面77-82
  */
 export default {
+  /**
+   * 封装 get 请求
+   * @param url 接口网址
+   * @param params get 请求参数
+   * @param config axios 的配置
+   * @returns handlerData
+   */
   async get(url: string, params: any = {}, config: AxiosRequestConfig = {}) {
     const { data } = await network({ url, method: "GET", params, ...config })
     return handlerData(data)

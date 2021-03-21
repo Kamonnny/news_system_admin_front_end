@@ -1,4 +1,4 @@
-<template>123</template>
+<template>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br></template>
 
 <script lang=ts>
 import { defineComponent, onMounted } from 'vue'
@@ -8,9 +8,9 @@ import axios from 'axios'
 export default defineComponent({
   name: 'News',
   setup() {
-    onMounted(async () => {
-      const data = await requests.post('/oauth', {username: 'Eachin',password: '12345'})
-      console.log(data)
+    onMounted( () => {
+      // const data = await requests.post('/oauth', {username: 'Eachin',password: '12345'})
+      // console.log(data)
     })
   },
 })
