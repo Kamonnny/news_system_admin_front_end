@@ -1,10 +1,10 @@
 <template>
   <a-layout>
     <a-layout-sider
+      class="my-sider"
       v-model:collapsed="collapsed"
       :trigger="null"
       collapsible
-      class="my-sider"
     >
       <div class="logo">
         <img
@@ -50,9 +50,13 @@
         style="background: #fff"
         @back="() => $router.go(-1)"
       />
-      <a-layout-content class="main-container">
-        <router-view />
-      </a-layout-content>
+
+      <a-config-provider :locale="locale">
+        <div class="main-container">
+          <router-view />
+        </div>
+      </a-config-provider>
+
       <!-- 下方版权信息 -->
       <a-layout-footer class="my-footer">
         Copyright © 2021 Stupid Pig
@@ -60,25 +64,32 @@
     </a-layout>
   </a-layout>
 </template>
+
 <script lang="ts">
 import {
-  ReadOutlined ,
+  ReadOutlined,
   TagsOutlined,
   CommentOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
 } from '@ant-design/icons-vue'
 import { defineComponent, ref } from 'vue'
+import { ConfigProvider } from 'ant-design-vue'
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
+
 export default defineComponent({
   components: {
-    ReadOutlined ,
+    ReadOutlined,
     TagsOutlined,
     CommentOutlined,
     MenuUnfoldOutlined,
     MenuFoldOutlined,
+    [ConfigProvider.name]: ConfigProvider,
   },
   setup() {
+    const locale = ref(zhCN)
     return {
+      locale,
       selectedKeys: ref<string[]>(['1']),
       collapsed: ref<boolean>(false),
     }
@@ -90,9 +101,6 @@ export default defineComponent({
 .my-sider {
   overflow: auto;
   height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
 
   .trigger {
     cursor: pointer;
@@ -123,8 +131,8 @@ export default defineComponent({
 }
 
 #main-layout {
-  // height: 100vh;
-  // overflow: auto;
+  height: 100vh;
+  overflow: auto;
 
   .my-header {
     background: #fff;
