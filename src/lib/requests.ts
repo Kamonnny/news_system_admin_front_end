@@ -2,8 +2,17 @@ import axios from 'axios'
 import router from "@/router"
 import { store } from "@/store"
 import { handleToken } from "@/lib/token"
+import { AxiosRequestConfig } from 'axios'
+import { message } from "ant-design-vue"
 
-const requests = axios.create({
+interface ApiResponse {
+  code: number
+  msg: string
+  data: any
+  now_ts: number
+}
+
+const network = axios.create({
   baseURL: "http://127.0.0.1:5000",
   timeout: 30000,
 })
@@ -11,7 +20,7 @@ const requests = axios.create({
 /**
  * 请求拦截器
  */
-requests.interceptors.request.use(
+network.interceptors.request.use(
   config => {
     // 给每个请求加上token
     config.headers.Authorization = `Bearer ${store.state.accessToken}`
@@ -27,12 +36,13 @@ requests.interceptors.request.use(
 /**
  * 响应拦截器
  */
-requests.interceptors.response.use(
+network.interceptors.response.use(
   response => {
     if (response.data.code === 401) {
       return axios({
+        // 请求刷新token
         url: `http://127.0.0.1:5000/oauth`,
-        method: "put",
+        method: "PUT",
         data: {
           refresh_token: localStorage.getItem("refreshToken")
         },
@@ -46,6 +56,8 @@ requests.interceptors.response.use(
           response.config.headers.Authorization = `Bearer ${tokens.access_token}`
           return axios(response.config)
         } else {
+
+          // 跳转登录页面
           localStorage.clear()
           const next = `${document.location.pathname}${document.location.hash}`
           router.push({ path: "/login", query: { next } })
@@ -58,5 +70,30 @@ requests.interceptors.response.use(
   }
 )
 
+/**
+ * 接口返回数据处理，此处只针对有返回情况
+ * @param response 接口返回消息
+ */
+const handlerData = (response: ApiResponse) => {
+  if (response.code === 200) {
+    return response.data
+  } else {
+    message.error(response.msg)
+    throw response
+  }
+}
 
-export default requests
+export default {
+  async get(url: string, params: any = {}, config: AxiosRequestConfig = {}) {
+    const { data } = await network({ url, method: "GET", params, ...config })
+    return handlerData(data)
+  },
+  async post(url: string, json: any = {}, config: AxiosRequestConfig = {}) {
+    const { data } = await network({ url, method: "POST", data: json, ...config })
+    return handlerData(data)
+  },
+  async put(url: string, json: any = {}, config: AxiosRequestConfig = {}) {
+    const { data } = await network({ url, method: "PUT", data: json, ...config })
+    return handlerData(data)
+  },
+}

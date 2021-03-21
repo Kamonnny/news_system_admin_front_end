@@ -20,6 +20,7 @@
           v-model:value="form.password"
           placeholder="请输入密码"
           size="large"
+          @pressEnter="login"
         />
 
         <br /><br /><br />
