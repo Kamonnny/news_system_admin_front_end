@@ -45,8 +45,8 @@
 
 <script lang="ts">
 import axios from 'axios'
-import { defineComponent, reactive, ref } from 'vue'
-import { handleToken } from '@/lib/token'
+import { defineComponent, reactive, ref, onMounted } from 'vue'
+import { checkLogin, handleToken } from '@/lib/token'
 import { useRouter } from 'vue-router'
 
 interface Form {
@@ -67,6 +67,10 @@ export default defineComponent({
       password: '',
     })
 
+    onMounted(() => {
+      if (checkLogin()) router.push('/')
+    })
+
     const login = async () => {
       if (form.password === '' || form.username === '') {
         showErr.value = true
@@ -74,15 +78,21 @@ export default defineComponent({
         return
       }
       loading.value = true
-      const { data } = await axios.post(`${baseURL}/oauth`, form)
-      if (data.code === 200) {
-        handleToken(data.data)
-        await router.push('/news')
-      } else {
+      try {
+        const { data } = await axios.post(`${baseURL}/oauth`, form)
+        if (data.code === 200) {
+          handleToken(data.data)
+          await router.push('/news')
+        } else {
+          showErr.value = true
+          errMsg.value = data.msg
+        }
+      } catch (error) {
         showErr.value = true
-        errMsg.value = data.msg
+        errMsg.value = '服务器繁忙'
+      } finally {
+        loading.value = false
       }
-      loading.value = false
     }
 
     return { form, showErr, loading, errMsg, login }

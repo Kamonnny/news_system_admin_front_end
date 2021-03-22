@@ -6,7 +6,7 @@
 import { defineComponent, onMounted } from 'vue'
 
 export default defineComponent({
-  name: 'News',
+  name: 'Comment',
   setup() {
     onMounted( () => {
 

@@ -2,7 +2,6 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Layout from "@/components/Layout.vue"
 
 const routes: Array<RouteRecordRaw> = [
-
   {
     path: '/login',
     name: 'Login',
@@ -18,18 +17,41 @@ const routes: Array<RouteRecordRaw> = [
         path: 'news',
         name: 'News',
         component: () => import('@/views/News.vue'),
-        meta:{
-          showPageHeader:true,
+        meta: {
+          showPageHeader: true,
           title: "新闻",
           subTitle: "管理新闻的添加、修改、与删除",
+          selectedKey: "/news"
         }
       },
       {
-        path: ':pathMatch(.*)*',
-        name: 'NotFound',
-        component: () => import('@/views/NotFound.vue'),
-      }
+        path: 'tag',
+        name: 'Tag',
+        component: () => import('@/views/Tag.vue'),
+        meta: {
+          showPageHeader: true,
+          title: "标签",
+          subTitle: "管理新闻标签的添加、修改、与删除",
+          selectedKey: "/tag"
+        }
+      },
+      {
+        path: 'comment',
+        name: 'Comment',
+        component: () => import('@/views/Comment.vue'),
+        meta: {
+          showPageHeader: true,
+          title: "评论",
+          subTitle: "管理评论的添加、与删除",
+          selectedKey: "/comment"
+        }
+      },
     ]
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('@/views/NotFound.vue'),
   },
 ]
 

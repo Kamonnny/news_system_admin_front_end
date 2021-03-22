@@ -15,15 +15,15 @@
         <span class="logo-title" v-if="!collapsed">猪猪新闻</span>
       </div>
       <a-menu theme="dark" mode="inline" v-model:selectedKeys="selectedKeys">
-        <a-menu-item key="1">
+        <a-menu-item key="/news" @click="redirect">
           <ReadOutlined />
           <span>新闻</span>
         </a-menu-item>
-        <a-menu-item key="2">
+        <a-menu-item key="/tag" @click="redirect">
           <TagsOutlined />
           <span>标签</span>
         </a-menu-item>
-        <a-menu-item key="3">
+        <a-menu-item key="/comment" @click="redirect">
           <CommentOutlined />
           <span>评论</span>
         </a-menu-item>
@@ -41,6 +41,17 @@
           class="trigger"
           @click="() => (collapsed = !collapsed)"
         />
+
+        <a-dropdown>
+          <a> {{ username }}&nbsp;<DownOutlined /> </a>
+          <template #overlay>
+            <a-menu>
+              <a-menu-item>
+                <a @click="logout">退出</a>
+              </a-menu-item>
+            </a-menu>
+          </template>
+        </a-dropdown>
       </a-layout-header>
 
       <a-page-header
@@ -70,11 +81,16 @@ import {
   ReadOutlined,
   TagsOutlined,
   CommentOutlined,
+  DownOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
 } from '@ant-design/icons-vue'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted, computed } from 'vue'
 import { ConfigProvider } from 'ant-design-vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useStore } from '@/store'
+import { getUsers } from '@/api/users'
+
 import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
 
 export default defineComponent({
@@ -82,16 +98,36 @@ export default defineComponent({
     ReadOutlined,
     TagsOutlined,
     CommentOutlined,
+    DownOutlined,
     MenuUnfoldOutlined,
     MenuFoldOutlined,
     [ConfigProvider.name]: ConfigProvider,
   },
   setup() {
+    const store = useStore()
+    const route = useRoute()
+    const router = useRouter()
     const locale = ref(zhCN)
+    const selectedKeys = ref<any[]>([route.meta.selectedKey])
+
+    const logout = () => {
+      store.commit('upAccessToken', null)
+      localStorage.clear()
+      location.href = '/login'
+    }
+
+    onMounted(async () => {
+      const data = await getUsers()
+      store.commit('upUser', data)
+    })
+
     return {
       locale,
-      selectedKeys: ref<string[]>(['1']),
+      logout,
+      selectedKeys,
       collapsed: ref<boolean>(false),
+      username: computed(() => store.state.username),
+      redirect: ({ key }: any) => router.push(key),
     }
   },
 })

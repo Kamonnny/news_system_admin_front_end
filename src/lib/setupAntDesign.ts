@@ -6,7 +6,8 @@ import {
   Input,
   Alert,
   Menu,
-  PageHeader
+  PageHeader,
+  Dropdown,
 } from 'ant-design-vue'
 
 import { App } from "vue"
@@ -14,6 +15,6 @@ import { App } from "vue"
 export default {
   install: (app: App) => {
     app.use(Layout).use(Row).use(Col).use(Button).use(Input).use(Alert).use(Menu)
-    .use(PageHeader)
+    .use(PageHeader).use(Dropdown)
   }
 }
