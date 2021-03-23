@@ -106,4 +106,8 @@ export default {
     const { data } = await network({ url, method: "PUT", data: json, ...config })
     return handlerData(data)
   },
+  async delete(url: string, config: AxiosRequestConfig = {}) {
+    const { data } = await network({ url, method: "DELETE", ...config })
+    return handlerData(data)
+  },
 }

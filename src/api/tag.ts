@@ -8,3 +8,6 @@ export const postTags = (tag: string) => {
   return request.post('/news/tags', { tag })
 }
 
+export const deleteTag = (tagId: number) => {
+  return request.delete(`/news/tags/${tagId}`)
+}

@@ -18,7 +18,6 @@ const routes: Array<RouteRecordRaw> = [
         name: 'News',
         component: () => import('@/views/News.vue'),
         meta: {
-          showPageHeader: true,
           title: "新闻",
           subTitle: "管理新闻的添加、修改、与删除",
           selectedKey: "/news"
@@ -29,7 +28,6 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Tag',
         component: () => import('@/views/Tag.vue'),
         meta: {
-          showPageHeader: true,
           title: "标签",
           subTitle: "管理新闻标签的添加、修改、与删除",
           selectedKey: "/tag"
@@ -40,7 +38,6 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Comment',
         component: () => import('@/views/Comment.vue'),
         meta: {
-          showPageHeader: true,
           title: "评论",
           subTitle: "管理评论的添加、与删除",
           selectedKey: "/comment"
