@@ -16,7 +16,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'news',
         name: 'News',
-        component: () => import('@/views/News.vue'),
+        component: () => import('@/views/News/index.vue'),
         meta: {
           title: "新闻",
           subTitle: "管理新闻的添加、修改、与删除",
