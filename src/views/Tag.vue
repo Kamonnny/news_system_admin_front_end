@@ -13,7 +13,13 @@
   </a-page-header>
 
   <div class="main-container">
-    <a-table :dataSource="tags" :pagination="false" :columns="columns">
+    <a-table
+      :dataSource="tags"
+      :pagination="false"
+      :loading="loading"
+      :columns="columns"
+      rowKey="tag_id"
+    >
       <template #operation="{ record }">
         <a @click="showModal(true, record.tag_id, record.tag)">修改</a>&nbsp;
         <a-popconfirm title="确认删除?" @confirm="onDelete(record.tag_id)">
@@ -27,7 +33,7 @@
     v-model:visible="visible"
     width="900px"
     :title="isEdit ? '修改标签' : '新增标签'"
-    @ok="onOk()"
+    @ok="onOk"
     :confirmLoading="confirmLoading"
   >
     <a-form :wrapper-col="{ span: 14 }" :label-col="{ span: 4 }">
@@ -41,7 +47,7 @@
 <script lang=ts>
 import { defineComponent, onMounted, ref } from 'vue'
 import { message } from 'ant-design-vue'
-import { deleteTag, getTags } from '@/api/tag'
+import { deleteTag, getTags, postTags, putTags } from '@/api/tag'
 
 interface Tags {
   tag: string
@@ -56,6 +62,7 @@ export default defineComponent({
     const tag = ref('')
     const tags = ref<Tags[]>([])
 
+    const loading = ref(false)
     const visible = ref(false)
     const confirmLoading = ref(false)
 
@@ -85,19 +92,51 @@ export default defineComponent({
     ]
 
     const fetchTags = async () => {
+      loading.value = true
       const data = await getTags()
       tags.value = data.items
+      loading.value = false
     }
 
     onMounted(() => fetchTags())
+
+    const onPost = async () => {
+      try {
+        confirmLoading.value = true
+        await postTags(tag.value)
+        confirmLoading.value = false
+        visible.value = false
+        message.success('标签新增成功')
+        await fetchTags()
+      } finally {
+        confirmLoading.value = false
+      }
+    }
+
+    const onPut = async () => {
+      try {
+        confirmLoading.value = true
+        await putTags(theTagId.value, tag.value)
+        confirmLoading.value = false
+        visible.value = false
+        message.success('标签修改成功')
+        await fetchTags()
+      } finally {
+        confirmLoading.value = false
+      }
+    }
+
+    const onOk = () => {
+      return isEdit.value ? onPut() : onPost()
+    }
 
     const onDelete = async (tag_id: number) => {
       const hide = message.loading('删除标签', 0)
       try {
         await deleteTag(tag_id)
-        await fetchTags()
         hide()
         message.success('删除成功')
+        await fetchTags()
       } catch (error) {
         hide()
       }
@@ -119,9 +158,11 @@ export default defineComponent({
       tags,
       isEdit,
       visible,
+      loading,
       confirmLoading,
       columns,
       onDelete,
+      onOk,
       showModal,
     }
   },

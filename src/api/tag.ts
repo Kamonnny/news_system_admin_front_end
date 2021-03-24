@@ -11,3 +11,7 @@ export const postTags = (tag: string) => {
 export const deleteTag = (tagId: number) => {
   return request.delete(`/news/tags/${tagId}`)
 }
+
+export const putTags = (tagId: number, tag: string) => {
+  return request.put(`/news/tags/${tagId}`, { tag })
+}

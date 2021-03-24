@@ -9,6 +9,7 @@ import {
   PageHeader,
   Dropdown,
   Table,
+  Space,
   Spin,
   Popconfirm,
   Modal,
@@ -21,6 +22,6 @@ export default {
   install: (app: App) => {
     app.use(Layout).use(Row).use(Col).use(Button).use(Input).use(Alert).use(Menu)
       .use(PageHeader).use(Dropdown).use(Table).use(Spin).use(Popconfirm)
-      .use(Modal).use(Form)
+      .use(Modal).use(Form).use(Space)
   }
 }

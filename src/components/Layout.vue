@@ -12,7 +12,7 @@
           <div :class="{ logo: !collapsed, 'collapsed-logo': collapsed }">
             <img
               alt="logo"
-              src="//static.ek-studio.cn/private/eachin/image/zhutou.png"
+              src="//cdn.global.eachin-life.com/private/eachin/image/zhutou.png"
               style="height: 28px"
             />
             <span class="logo-title" v-if="!collapsed">猪猪新闻</span>
