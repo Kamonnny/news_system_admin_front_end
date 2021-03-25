@@ -52,6 +52,7 @@ import { useRouter } from 'vue-router'
 interface Form {
   username: string
   password: string
+  check_admin: boolean
 }
 
 export default defineComponent({
@@ -65,6 +66,7 @@ export default defineComponent({
     const form = reactive<Form>({
       username: '',
       password: '',
+      check_admin: true,
     })
 
     onMounted(() => {

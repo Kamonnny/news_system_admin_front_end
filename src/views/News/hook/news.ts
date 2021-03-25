@@ -69,9 +69,15 @@ export const deleteNewsHook = (
 ) => {
 
   const onDeleteNews = async (newsId: number) => {
-    await deleteNews(newsId)
-    message.success('新闻删除成功')
-    fetchNews(loading, total)
+    const hide = message.loading('删除新闻', 0)
+    try {
+      await deleteNews(newsId)
+      hide()
+      message.success('新闻删除成功')
+      fetchNews(loading, total)
+    } catch (error) {
+      hide()
+    }
   }
 
   return { onDeleteNews }

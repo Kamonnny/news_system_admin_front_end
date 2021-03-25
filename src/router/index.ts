@@ -39,7 +39,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/Comment.vue'),
         meta: {
           title: "评论",
-          subTitle: "管理评论的添加、与删除",
+          subTitle: "管理评论的删除",
           selectedKey: "/comment"
         }
       },
