@@ -15,7 +15,7 @@
               src="//cdn.global.eachin-life.com/private/eachin/image/zhutou.png"
               style="height: 28px"
             />
-            <span class="logo-title" v-if="!collapsed">猪猪新闻</span>
+            <span class="logo-title" v-if="!collapsed">新闻管理系统</span>
           </div>
         </div>
         <a-menu theme="dark" mode="inline" v-model:selectedKeys="selectedKeys">
