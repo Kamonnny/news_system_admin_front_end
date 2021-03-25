@@ -30,6 +30,7 @@ export const table = (
     },
     {
       title: '操作',
+      width: "140px",
       dataIndex: 'operation',
       slots: { customRender: 'operation' },
     },
