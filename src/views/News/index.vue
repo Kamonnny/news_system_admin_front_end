@@ -71,7 +71,12 @@
 <script lang=ts>
 import { defineComponent, onMounted } from 'vue'
 import { table } from '@/views/News/hook/table'
-import { getNewsHook, deleteNewsHook } from '@/views/News/hook/news'
+import {
+  getNewsHook,
+  postNewHook,
+  putNewHook,
+  deleteNewsHook,
+} from '@/views/News/hook/news'
 import { modal } from '@/views/News/hook/modal'
 
 export default defineComponent({
@@ -82,6 +87,7 @@ export default defineComponent({
       visible,
       form,
       tags,
+      newsId,
       confirmLoading,
       showModal,
       fetchTags,
@@ -91,6 +97,8 @@ export default defineComponent({
       fetchNews,
       getNewsParams
     )
+    const { onPostNews } = postNewHook(form)
+    const { onPutNews } = putNewHook(newsId, form)
     const { onDeleteNews } = deleteNewsHook(fetchNews, loading, total)
 
     onMounted(() => {
@@ -98,6 +106,16 @@ export default defineComponent({
       fetchTags()
     })
     const onSearch = () => fetchNews(loading, total)
+    const onOk = async () => {
+      confirmLoading.value = true
+      try {
+        isEdit.value ? await onPutNews() : await onPostNews()
+      } finally {
+        confirmLoading.value = false
+        visible.value = false
+        fetchNews(loading, total)
+      }
+    }
 
     return {
       columns,
@@ -114,6 +132,7 @@ export default defineComponent({
       onSearch,
       onDeleteNews,
       showModal,
+      onOk,
     }
   },
 })

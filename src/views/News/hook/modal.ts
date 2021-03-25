@@ -14,6 +14,7 @@ export const modal = () => {
   const visible = ref(false)
   const confirmLoading = ref(false)
   const tags = ref<Tags[]>([])
+  const newsId = ref(0)
 
   const form = reactive<NewsModel>({
     title: '',
@@ -28,14 +29,15 @@ export const modal = () => {
 
   const showModal = async (
     edit: boolean = false,
-    newsId: number
+    theNewsId: number
   ) => {
     isEdit.value = edit
     if (edit) {
-      const data = await getTheNews(newsId)
+      const data = await getTheNews(theNewsId)
       form.title = data.title
       form.content = data.content
       form.tag_id = data.tag_id
+      newsId.value = theNewsId
     } else {
       form.title = ''
       form.content = ''
@@ -44,5 +46,5 @@ export const modal = () => {
     visible.value = true
   }
 
-  return { isEdit, visible, form, tags, confirmLoading, showModal, fetchTags }
+  return { isEdit, visible, form, newsId, tags, confirmLoading, showModal, fetchTags }
 }

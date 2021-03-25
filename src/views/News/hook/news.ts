@@ -1,5 +1,5 @@
 import { reactive, ref, Ref } from 'vue'
-import { GetNewsParams, getNews, deleteNews } from '@/api/news'
+import { GetNewsParams, getNews, postNews, putNews, deleteNews, NewsModel } from '@/api/news'
 import { message } from 'ant-design-vue'
 
 interface Tags {
@@ -45,6 +45,22 @@ export const getNewsHook = () => {
   }
 
   return { getNewsParams, news, searchKey, fetchNews }
+}
+
+export const postNewHook = (form: NewsModel) => {
+  const onPostNews = () => {
+    postNews(form)
+    message.success("添加新闻成功")
+  }
+  return { onPostNews }
+}
+
+export const putNewHook = (newsId: Ref<number>, form: NewsModel) => {
+  const onPutNews = () => {
+    putNews(newsId.value, form)
+    message.success("修改新闻成功")
+  }
+  return { onPutNews }
 }
 
 export const deleteNewsHook = (
